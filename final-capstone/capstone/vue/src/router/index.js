@@ -9,6 +9,7 @@ import Itinerary from  '../views/Itinerary.vue'
 import RouteDetails from '../components/RouteDetails.vue'
 import AddItinerary from '../components/AddItinerary.vue'
 import Trip from '../views/Trip.vue'
+import EditItineraryCard from '../components/EditItineraryCard.vue'
 
 Vue.use(Router)
 
@@ -93,6 +94,14 @@ const router = new Router({
       path: "/route",
       name: "route",
       component: RouteDetails,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: "/itinerary/:id/edit",
+      name: "edit-itinerary",
+      component: EditItineraryCard, 
       meta: {
         requiresAuth: false
       }

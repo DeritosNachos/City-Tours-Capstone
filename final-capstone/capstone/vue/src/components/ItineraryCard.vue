@@ -9,6 +9,11 @@
       <h3>Plan for: 
         {{itinerary.itineraryDate}}
       </h3>
+      <h4>Starting Point: </h4>
+      <p>{{itinerary.itineraryStartingPoint}} </p>
+      <router-link :to="{name: 'edit-itinerary', params:{id: pathId}}">
+      <button>Edit this itinerary  </button>
+      </router-link>
       <!-- <div class="landmark-card" v-for="landmark in landmarks" :key="landmark.landmarkId">
         <h3> {{landmark.landmarkName}} </h3>
        <img :src='landmark.landmarkPhoto' alt="photo of landmark">
