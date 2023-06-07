@@ -1,11 +1,15 @@
 package com.techelevator.dao;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techelevator.model.Itinerary;
 import com.techelevator.model.Landmark;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -24,7 +28,7 @@ public class JdbcLandmarkDao implements LandmarkDao{
     @Override
     public List<Landmark> getAllLandmarks() {
         List<Landmark> listOfLandmarks = new ArrayList<>();
-        String sql = "SELECT * FROM landmarks";
+        String sql = "SELECT * FROM landmarks ORDER BY landmark_id";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
 
         try{
@@ -78,13 +82,12 @@ public class JdbcLandmarkDao implements LandmarkDao{
     }
 
     @Override
-    public void addNewLandmark(Landmark newLandmark, String username) {
+    public int addNewLandmark(Landmark newLandmark) {
         String sql = "INSERT INTO landmarks (landmark_name, landmark_photo, landmark_description, landmark_address, landmark_hours_of_operation, landmark_venue_type) VALUES (?,?,?,?,?,?) RETURNING landmark_id";
         try{
             int newLandmarkId = jdbcTemplate.queryForObject(sql, int.class, newLandmark.getLandmarkName(), newLandmark.getLandmarkPhoto(), newLandmark.getLandmarkDescription(), newLandmark.getLandmarkAddress(), newLandmark.getLandmarkHoursOfOperation(), newLandmark.getLandmarkVenueType());
             newLandmark.setLandmarkId(newLandmarkId);
-
-
+            return newLandmarkId;
         }
         catch (CannotGetJdbcConnectionException e){
             throw new RuntimeException();
@@ -92,22 +95,39 @@ public class JdbcLandmarkDao implements LandmarkDao{
     }
 
     @Override
-    public void addLikeToLandmark(int landmark_id) {
+    public void addLikeToLandmark(int landmarkId) {
         String addLike = "UPDATE landmarks" +
                 " SET landmark_like_count = landmark_like_count + 1" +
                 " WHERE landmark_id = ?";
-        jdbcTemplate.update(addLike, landmark_id);
+        jdbcTemplate.update(addLike, landmarkId);
     }
 
     @Override
-    public void removeALikeToLandmark(int landmark_id) {
-        String deleteLike = "UPDATE landmarks" +
-                " SET landmark_like_count = landmark_like_count - 1" +
-                " WHERE landmark_id = ?";
-        jdbcTemplate.update(deleteLike, landmark_id);
+    public int getLikesFromLandmark(int landmarkId) {
+        Landmark landmark = new Landmark();
+        String getLikesSql = "SELECT landmark_like_count FROM landmarks WHERE landmark_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(getLikesSql, landmarkId);
+        if(results.next()){
+            landmark = mapRowLandmark(results);
+        }
+        return landmark.getLandmarkLikeCount();
     }
 
+    @Override
+    public int getDislikesFromLandmark(int landmarkId) {
+        String getDislikesSql = "SELECT landmark_dislike_count FROM landmarks WHERE landmark_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(getDislikesSql, landmarkId);
+        int likes = results.getInt("landmark_dislike_count");
+        return likes;
+    }
 
+    @Override
+    public void addDislikesToLandmark(int landmarkId) {
+        String addDislike = "UPDATE landmarks" +
+                " SET landmark_dislike_count = landmark_dislike_count + 1" +
+                " WHERE landmark_id = ?";
+        jdbcTemplate.update(addDislike, landmarkId);
+    }
 
 
     private Landmark mapRowLandmark(SqlRowSet rs){
@@ -119,6 +139,8 @@ public class JdbcLandmarkDao implements LandmarkDao{
         landmark.setLandmarkAddress(rs.getString("landmark_address"));
         landmark.setLandmarkHoursOfOperation(rs.getString("landmark_hours_of_operation"));
         landmark.setLandmarkVenueType(rs.getString("landmark_venue_type"));
+        landmark.setLandmarkLikeCount(rs.getInt("landmark_like_count"));
+        landmark.setLandmarkDislikeCount(rs.getInt("landmark_dislike_count"));
         return landmark;
     }
 }

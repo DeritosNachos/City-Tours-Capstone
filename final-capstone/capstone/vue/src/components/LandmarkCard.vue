@@ -1,153 +1,227 @@
 <template>
-  <div class="landmark-card"  @click="toggleShowHide" >
-        <img :src='landmark.landmarkPhoto' alt="photo of landmark">
-        
-        <div id="landmark-info" :class="{ read: showHide }">
-    
-            <h1>{{landmark.landmarkName}}</h1>
-            <div v-show="showHide">
-            <p>{{landmark.landmarkDescription}}</p>
-            <br>
-            <p>{{landmark.landmarkAddress}}</p>
-            <br>
-            <p>{{landmark.landmarkVenueType}}</p>
-            </div>
-            <h3>{{landmark.landmarkHoursOfOperation}}</h3>
-            <div @click="addLandmarkId(landmark.landmarkId)" >
-                <button :disabled="dropDownActive" @click="showDropDown">{{ itineraries.length > 0 ? 'Add' : 'Please Add an Itinerary' }}</button>
-                <div @mouseleave="dropDownActive=false" class="dropdown" v-if="dropDownActive">
-                    <div  v-for="itinerary in itineraries" :key="itinerary.itineraryId">
-                        <p @click.prevent="addItineraryId(itinerary.itineraryId);toggleShowAddRemove()">{{itinerary.itineraryName}}</p>
-                    </div>
-                </div>
-                <button v-on:click="removeDestination(pathId, landmark.landmarkId)" v-if="addRemove">Remove</button>
-            </div>
+  <div class="card-container">
+    <div
+      :key="landmark.landmarkId"
+      class="landmark-card"
+      @click="toggleShowHide"
+    >
+      <img :src="landmark.landmarkPhoto" alt="photo of landmark" />
+
+      <div id="landmark-info" :class="{ read: showHide }">
+        <h1>{{ landmark.landmarkName }}</h1>
+        <div class="likes">
+          <button
+            @click="
+              addLikes(),
+                (showHide = !showHide),
+                (likedDisliked.reviewed = true),
+                (likedDisliked.landmarkId=landmark.landmarkId)
+            "
+            :disabled="likedDisliked.reviewed"
+          >
+            <font-awesome-icon icon="fa-solid fa-thumbs-up" />
+          </button>
+          <p>{{ likes }}</p>
+          <button
+            @click="
+              addDislikes(landmark.landmarkId),
+                (showHide = !showHide),
+                (likedDisliked.reviewed = true),
+                (likedDisliked.landmarkId=landmark.landmarkId)
+            "
+            :disabled="likedDisliked.reviewed"
+          >
+            <font-awesome-icon icon="fa-solid fa-thumbs-down" />
+          </button>
+          <p>{{ dislikes }}</p>
         </div>
+
+        <div v-show="showHide">
+          <p>{{ landmark.landmarkDescription }}</p>
+          <br />
+          <p>{{ landmark.landmarkAddress }}</p>
+          <br />
+          <p>{{ landmark.landmarkVenueType }}</p>
+        </div>
+        <h3>{{ landmark.landmarkHoursOfOperation.includes('true') || !landmark.landmarkHoursOfOperation.includes('false') ? "Open" : "Closed" }}</h3>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import ItineraryService from "../services/ItineraryService"
-import DestinationService from "../services/DestinationService"
+import ItineraryService from "../services/ItineraryService";
+import DestinationService from "../services/DestinationService";
+import LandmarkService from "../services/LandmarkService";
+import axios from "axios";
 export default {
-    name: 'landmark-card',
-    props: ['landmark'],
-    data() {
-        return {
-            pathId: this.$route.params.id,
-            itineraries: [],
-            showHide: false,
-            dropDownActive: false,
-            addRemove: true,
-            destination: {
-                landmarkId: 0,
-                itineraryId: 0
-            }
+  name: "landmark-card",
+  props: ["landmark", "searchResult"],
+  data() {
+    return {
+      pathId: this.$route.params.id,
+      likes: this.landmark.landmarkLikeCount,
+      dislikes: this.landmark.landmarkDislikeCount,
+      showHide: false,
+      likedDisliked: {
+        userId: 0,
+        landmarkId: 0,
+        reviewed: false,
+      },
+    };
+  },
+  methods: {
+    addLikes() {
+      LandmarkService.addLikeToLandmark(this.landmark.landmarkId).then((r) => {
+        if (r.status === 200) {
+          console.log(r.status);
+          this.likes++;
+          // location.reload();
         }
+      });
     },
-    methods: {
-        toggleShowAddRemove(){
-            this.addRemove = !this.addRemove
-        },
-        toggleShowHide() {
-            this.showHide = !this.showHide
-        },
-        addLandmarkId(id) {
-            this.destination.landmarkId = id;
-            this.showHide = true;
-            // console.log(id)
-        },
-        addItineraryId(id) {
-            this.destination.itineraryId = id;
-            this.dropDownActive = false;
-            DestinationService.addDestination(this.destination).then((r) => {
-                console.log(r.status);
-            })
-
-        },
-        removeDestination(itineraryId, landmarkId){
-            let choice = confirm("Delete Destination?");
-            if(choice){
-                DestinationService.removeDestination(itineraryId, landmarkId).then(
-                    (response) => {
-                        console.log(response);
-                        this.$router.go(`/itinerary/${itineraryId}`);
-                    }
-                )
-            }
-        },
-
-        showDropDown() {
-            this.dropDownActive = !this.dropDownActive
+    addDislikes(landmarkId) {
+      LandmarkService.addDislikeToLandmark(landmarkId).then((r) => {
+        if (r.status === 200) {
+          console.log(r.status);
+          this.dislikes++;
+          // location.reload();
         }
+      });
     },
-    created() {
+    toggleShowHide() {
+      this.showHide = !this.showHide;
+    },
+    removeDestination(itineraryId, landmarkId) {
+      let choice = confirm("Delete Destination?");
+      if (choice) {
+        DestinationService.removeDestination(itineraryId, landmarkId).then(
+          (response) => {
+            console.log(response);
+            this.$router.go(`/itinerary/${itineraryId}`);
+          }
+        );
+      }
+    },
+  },
+  created() {
     ItineraryService.getAllItineraries().then((response) => {
-        this.itineraries = response.data
-    })
-    }
-
-}
+      this.itineraries = response.data;
+    });
+  },
+  mounted() {
+    axios
+      .get("/api/current-user-id")
+      .then((response) => {
+        this.likedDisliked.userId = response.data.userId;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+};
 </script>
 
 <style scoped>
-
-
-
-@media only screen and (max-width: 800px) {
+/* CSS styling still a work in progress */
+/* .landmark-container {
+  display: flex;
+  flex-wrap: wrap;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "landmark-card landmark-card";
+} */
 
 .landmark-card {
-    
+  grid-area: landmark-card;
+  border-radius: 10px;
+  border: 2px solid;
+  width: 500px;
+  height: 500px;
+  margin: 30px;
+  position: relative;
+}
+img {
+  border-radius: inherit;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+#landmark-info {
+  padding: 5px;
+  position: inherit;
+  color: whitesmoke;
+  text-shadow: 2px 2px 2px black;
+  transition: height 5s;
+}
+.read {
+  background: linear-gradient(
+    rgba(0, 0, 0, 1),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 1)
+  );
+}
+
+div.likes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+div.likes button {
+  border-radius: 10px;
+  color: #004aad;
+}
+
+@media only screen and (max-width: 1200px) {
+  .card-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .landmark-card {
     border-radius: 10px;
     border: 2px solid;
     height: auto;
+    width: 85vw;
     margin: 5px;
     position: relative;
-    
-}
-img {
+  }
+  img {
     border-radius: inherit;
     position: absolute;
     height: 100%;
     width: 100%;
     object-fit: cover;
-    
-    
-}
+  }
 
-#landmark-info {
+  #landmark-info {
     padding: 5px;
     position: inherit;
     color: whitesmoke;
     text-shadow: 2px 2px 2px black;
     transition: height 5s;
-}
-.read {
-    
-    background: linear-gradient( rgba(0,0,0,1), rgba(0,0,0,.75), rgba(0,0,0,1));
-}
+  }
+  .read {
+    background: linear-gradient(
+      rgba(0, 0, 0, 1),
+      rgba(0, 0, 0, 0.75),
+      rgba(0, 0, 0, 1)
+    );
+  }
 
-.dropdown {
-    border-radius:0 15px 15px 15px;
-    border: 1px solid;
-    text-shadow: none;
-    color: black;
-    background-color: whitesmoke;
-    position: absolute;
-    z-index: 1;
-    width: auto;
-    padding-right: 5px;
-    padding-left: 5px;
-    margin-top: -10px;
-    transition: height 5s;
-}
-.dropdown>div>p {
-    border-bottom: solid 1px gray;
-    padding-bottom: 10px;
-}
-.dropdown>div>p:hover {
-    font-size: 110%;
-    cursor: pointer;
-}
+  div.likes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+  }
+
+  div.likes button {
+    border-radius: 10px;
+    color: #004aad;
+  }
 }
 </style>

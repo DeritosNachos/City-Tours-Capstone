@@ -19,6 +19,8 @@ public interface ItineraryDao {
 
     List<Itinerary> getAllItinerariesByUserName(String userName);
 
+    List<Itinerary> getSharedItineraries(int userid);
+
 
 
 }

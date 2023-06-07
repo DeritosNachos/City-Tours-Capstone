@@ -12,13 +12,13 @@
       <label for="date">Date: </label>
       <input
         class="date-input"
-        type="text"
-        placeholder="YYYY-MM-DD"
+        type="date"
         v-model="itinerary.itineraryDate"
       />
        <br />
       <label for="starting-point">Starting Point: </label>
-      <input
+      <input id="autocomplete"
+        ref="startingPoint"
         class="starting-point-input"
         type="text"
         placeholder="Starting Address"
@@ -26,12 +26,14 @@
       />
       <br />
       <button>Add Itinerary</button>
+      <p><router-link :to="{ name: 'home' }">Cancel</router-link></p>
     </form>
   </div>
 </template>
 
 <script>
 import itineraryService from "../services/ItineraryService.js";
+import moment from "moment";
 
 export default {
   data() {
@@ -43,35 +45,52 @@ export default {
       },
     };
   },
+  mounted() {
+    const autocomplete = new window.google.maps.places.Autocomplete(
+      this.$refs["startingPoint"]);
+      autocomplete.setComponentRestrictions({
+        contry: ["us"]
+      })
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
+      this.itinerary.itineraryStartingPoint = place.formatted_address;
+    })
+  },
   created() {},
   methods: {
     addItinerary() {
-      const newItinerary = {
-        itineraryName: this.itinerary.itineraryName,
-        itineraryDate: this.itinerary.itineraryDate,
-        itineraryStartingPoint: this.itinerary.itineraryStartingPoint,
-      };
+     if(this.itinerary.itineraryName === ''){
+        window.alert("Please fill in the name for your new itinerary")
+      } 
+      else if(this.itinerary.itineraryDate === '' || moment(this.itinerary.itineraryDate).isBefore(moment())){
+        window.alert("Please fill in a correct date for your new itinerary")
+      }  
+     else if(this.itinerary.itineraryStartingPoint === ''){
+        window.alert("Please fill in an address as starting point for your new itinerary")
+      }
+      else {
       window.alert("Successfully saved it!");
-
       itineraryService
-        .createNewItinerary(newItinerary)
+        .createNewItinerary(this.itinerary)
         .then((response) => {
-          if (response.status === 201) {
+          console.log("response", response)
+          if (response.status === 200) {
             this.itinerary.itineraryName = " ";
             this.itinerary.itineraryDate = "";
             this.itinerary.itineraryStartingPoint = "";
-            this.$router.push("/addItinerary");
+            this.$router.back();
           }
         })
         .catch((error) => {
           this.handleErrorResponse(error, "adding");
         });
-    },
+      }
+    }
   }
 };
 </script>
 
-<style>
+<style scoped>
 input, button{
 margin: 10px 0;
 }

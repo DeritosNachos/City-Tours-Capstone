@@ -51,9 +51,9 @@ public class JdbcItineraryDao implements ItineraryDao{
 
     @Override
     public void deleteItinerary(int id) {
-        String sql = "DELETE FROM itinerary WHERE itinerary_id = ?";
+        String sql = "DELETE FROM destinations WHERE itinerary_id = ?; DELETE FROM trips WHERE itinerary_id = ?;DELETE FROM itinerary WHERE itinerary_id = ?";
         try{
-            jdbcTemplate.update(sql, id);
+            jdbcTemplate.update(sql,id, id, id);
         }
         catch (CannotGetJdbcConnectionException e){
             throw new RuntimeException();
@@ -121,6 +121,20 @@ public class JdbcItineraryDao implements ItineraryDao{
         } catch (Exception e){
             throw new RuntimeException();
         }
+    }
+
+    @Override
+    public List<Itinerary> getSharedItineraries(int userid) {
+        List<Itinerary> sharedItineraries = new ArrayList<>();
+        String sharedSql = "SELECT * FROM itinerary" +
+                " JOIN trips on trips.itinerary_id = itinerary.itinerary_id" +
+                " JOIN shared_trips ON shared_trips.trip_id = trips.trip_id" +
+                " WHERE user1_id = ? OR user2_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sharedSql, userid, userid);
+        while(results.next()){
+            sharedItineraries.add(mapRowToItinerary(results));
+        }
+        return sharedItineraries;
     }
 
     public Itinerary mapRowToItinerary(SqlRowSet rowSet) {

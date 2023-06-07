@@ -13,13 +13,15 @@
      <label for="date">Date: </label>
       <input
         class="date-input"
-        type="text"
+        type="date"
         v-model="itinerary.itineraryDate"
       />
     </div>
     <div>
       <label for="starting-point">Starting Point: </label>
       <input
+        id="autocomplete"
+        ref="startingPoint"
         class="starting-point-input"
         type="text"
         v-model="itinerary.itineraryStartingPoint"
@@ -38,6 +40,18 @@ export default {
             pathId: this.$route.params.id,
         }
     },
+
+  mounted() {
+    const autocomplete = new window.google.maps.places.Autocomplete(
+      this.$refs["startingPoint"]);
+      autocomplete.setComponentRestrictions({
+        contry: ["us"]
+      })
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
+      this.itinerary.itineraryStartingPoint = place.formatted_address;
+    })
+  },
 
     created() {
         ItineraryService.getSpecificItinerary(this.pathId)

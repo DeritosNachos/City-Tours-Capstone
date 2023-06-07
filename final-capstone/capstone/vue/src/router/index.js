@@ -31,7 +31,7 @@ const router = new Router({
       name: 'home',
       component: Home,
       meta: {
-        requiresAuth: true
+        requiresAuth: false
       }
     },
     {
@@ -63,7 +63,7 @@ const router = new Router({
       name: "itinerary",
       component: Itinerary,
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     {
@@ -79,7 +79,7 @@ const router = new Router({
       name: "landmarks",
       component: Itinerary,
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     {
@@ -87,7 +87,7 @@ const router = new Router({
       name: "add-itinerary",
       component: AddItinerary,
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     {
@@ -103,7 +103,7 @@ const router = new Router({
       name: "edit-itinerary",
       component: EditItineraryCard, 
       meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     

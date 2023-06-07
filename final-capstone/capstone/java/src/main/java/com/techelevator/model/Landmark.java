@@ -1,5 +1,9 @@
 package com.techelevator.model;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import java.util.Random;
+
 public class Landmark {
 
 
@@ -11,9 +15,10 @@ public class Landmark {
     private String landmarkHoursOfOperation;
     private String landmarkVenueType;
     private int landmarkLikeCount;
+    private int landmarkDislikeCount;
 
 
-    public Landmark(int landmarkId, String landmarkName, String landmarkPhoto, String landmarkDescription, String landmarkAddress, String landmarkHoursOfOperation, String landmarkVenueType, int landmarkLikeCount) {
+    public Landmark(int landmarkId, String landmarkName, String landmarkPhoto, String landmarkDescription, String landmarkAddress, String landmarkHoursOfOperation, String landmarkVenueType, int landmarkLikeCount, int landmarkDislikeCount) {
         this.landmarkId = landmarkId;
         this.landmarkName = landmarkName;
         this.landmarkPhoto = landmarkPhoto;
@@ -21,18 +26,53 @@ public class Landmark {
         this.landmarkAddress = landmarkAddress;
         this.landmarkHoursOfOperation = landmarkHoursOfOperation;
         this.landmarkVenueType = landmarkVenueType;
+        this.landmarkLikeCount = landmarkLikeCount;
+        this.landmarkDislikeCount = landmarkDislikeCount;
     }
 
-    public Landmark(String landmarkName, String landmarkPhoto, String landmarkDescription, String landmarkAddress, String landmarkHoursOfOperation, String landmarkVenueType, int landmarkLikeCount) {
+    public Landmark(String landmarkName, String landmarkPhoto, String landmarkDescription, String landmarkAddress, String landmarkHoursOfOperation, String landmarkVenueType, int landmarkLikeCount, int landmarkDislikeCount) {
         this.landmarkName = landmarkName;
         this.landmarkPhoto = landmarkPhoto;
         this.landmarkDescription = landmarkDescription;
         this.landmarkAddress = landmarkAddress;
         this.landmarkHoursOfOperation = landmarkHoursOfOperation;
         this.landmarkVenueType = landmarkVenueType;
+        this.landmarkLikeCount = landmarkLikeCount;
+        this.landmarkDislikeCount = landmarkDislikeCount;
+    }
+
+    public Landmark(int landmarkId, String landmarkName, String landmarkPhoto, String landmarkDescription, String landmarkAddress, String landmarkHoursOfOperation, String landmarkVenueType) {
+        this.landmarkId = landmarkId;
+        this.landmarkName = landmarkName;
+        this.landmarkPhoto = landmarkPhoto;
+        this.landmarkDescription = landmarkDescription;
+        this.landmarkAddress = landmarkAddress;
+        this.landmarkHoursOfOperation = landmarkHoursOfOperation;
+        this.landmarkVenueType = landmarkVenueType;
+        this.landmarkLikeCount = 0;
+        this.landmarkDislikeCount = 0;
+    }
+
+    public Landmark(String landmarkName, String landmarkPhoto, String landmarkDescription, String landmarkAddress, String landmarkHoursOfOperation, String landmarkVenueType) {
+        this.landmarkName = landmarkName;
+        this.landmarkPhoto = landmarkPhoto;
+        this.landmarkDescription = landmarkDescription;
+        this.landmarkAddress = landmarkAddress;
+        this.landmarkHoursOfOperation = landmarkHoursOfOperation;
+        this.landmarkVenueType = landmarkVenueType;
+        this.landmarkLikeCount = 0;
+        this.landmarkDislikeCount = 0;
     }
 
     public Landmark() {
+    }
+
+    public int getLandmarkDislikeCount() {
+        return landmarkDislikeCount;
+    }
+
+    public void setLandmarkDislikeCount(int landmarkDislikeCount) {
+        this.landmarkDislikeCount = landmarkDislikeCount;
     }
 
     public int getLandmarkLikeCount() {

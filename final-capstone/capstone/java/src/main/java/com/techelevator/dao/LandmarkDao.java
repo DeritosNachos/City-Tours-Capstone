@@ -9,8 +9,12 @@ public interface LandmarkDao {
     List<Landmark> getAllLandmarks();
     List<Landmark> getLandmarksOnItinerary(int itineraryId);
     Landmark getSpecificLandmarkById(int id);
-    void addNewLandmark(Landmark newLandmark, String username);
-    void addLikeToLandmark(int landmark_id);
-    void removeALikeToLandmark(int landmark_id);
+    int addNewLandmark(Landmark newLandmark);
+    void addLikeToLandmark(int landmarkId);
+    int getLikesFromLandmark(int landmarkId);
+
+    int getDislikesFromLandmark(int landmarkId);
+
+    void addDislikesToLandmark(int landmarkId);
 
 }

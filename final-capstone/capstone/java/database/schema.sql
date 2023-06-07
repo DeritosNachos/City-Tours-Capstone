@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS  trips, destinations, users, landmarks, itinerary CASCADE;
+DROP TABLE IF EXISTS  shared_trips, trips, destinations, users, landmarks, itinerary CASCADE;
 
 CREATE TABLE users (
 	user_id SERIAL,
@@ -10,18 +10,26 @@ CREATE TABLE users (
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 );
 
-
+--CREATE TABLE reviewed_landmark (
+--    user_id int,
+--    landmark_id int,
+--    reviewed BOOLEAN,
+--    CONSTRAINT PK_reviewed_landmark PRIMARY KEY (user_id, landmark_id),
+--    CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES users(user_id),
+--    CONSTRAINT FK_landmark FOREIGN KEY (landmark_id) REFERENCES landmarks(landmark_id)
+--);
 
 
 CREATE TABLE landmarks (
 	landmark_id SERIAL,
 	landmark_name varchar(100) NOT NULL,
-	landmark_photo varchar(200) NOT NULL,
-	landmark_description varchar(500) NOT NULL,
+	landmark_photo varchar(1000) NOT NULL,
+	landmark_description varchar(5000) NOT NULL,
 	landmark_address varchar(200) NOT NULL,
 	landmark_hours_of_operation varchar(200) NOT NULL,
 	landmark_venue_type varchar(100) NOT NULL,
 	landmark_like_count INT NOT NULL DEFAULT 0,
+	landmark_dislike_count INT NOT NULL DEFAULT 0,
 	CONSTRAINT PK_landmarks PRIMARY KEY (landmark_id)
 );
 
@@ -34,11 +42,18 @@ CREATE TABLE itinerary (
 );
 
 CREATE TABLE trips (
+    trip_id SERIAL,
     user_id INT NOT NULL,
     itinerary_id INT NOT NULL,
-    CONSTRAINT PK_trips PRIMARY KEY (user_id, itinerary_id),
+    CONSTRAINT PK_trips PRIMARY KEY (trip_id, user_id, itinerary_id),
     CONSTRAINT FK_trip_user FOREIGN KEY(user_id) REFERENCES users(user_id),
     CONSTRAINT FK_trip_itinerary FOREIGN KEY(itinerary_id) REFERENCES itinerary(itinerary_id)
+);
+
+CREATE TABLE shared_trips (
+    trip_id INT ,
+    user1_id INT ,
+    user2_id INT
 );
 
 CREATE TABLE destinations (
@@ -54,4 +69,6 @@ COMMIT TRANSACTION;
 SELECT * FROM landmarks;
 SELECT * FROM users;
 SELECT * FROM itinerary;
+
+
 
