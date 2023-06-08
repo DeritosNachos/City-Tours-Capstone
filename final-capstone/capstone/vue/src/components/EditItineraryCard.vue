@@ -43,7 +43,7 @@ export default {
 
   mounted() {
     const autocomplete = new window.google.maps.places.Autocomplete(
-      this.$refs["startingPoint"]);
+      document.getElementById("autocomplete"));
       autocomplete.setComponentRestrictions({
         contry: ["us"]
       })

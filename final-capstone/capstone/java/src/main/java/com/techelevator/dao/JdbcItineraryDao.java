@@ -137,6 +137,22 @@ public class JdbcItineraryDao implements ItineraryDao{
         return sharedItineraries;
     }
 
+    @Override
+    public List<Itinerary> getCombinedItineraries(int userId) {
+        List<Itinerary> comboList = new ArrayList<>();
+        List<Itinerary> itineraries = getAllItineraries(userId);
+        List<Itinerary> sharedItineraries = getSharedItineraries(userId);
+
+        for (int i = 0; i < itineraries.size() ; i++) {
+            comboList.add(itineraries.get(i));
+        }
+        for (int j = 0; j < sharedItineraries.size(); j++) {
+            comboList.add(sharedItineraries.get(j));
+        }
+
+        return comboList;
+    }
+
     public Itinerary mapRowToItinerary(SqlRowSet rowSet) {
         Itinerary itinerary = new Itinerary();
         itinerary.setItineraryId(rowSet.getInt("itinerary_id"));

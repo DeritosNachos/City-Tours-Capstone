@@ -62,9 +62,10 @@ public class GooglePlacesService {
                     for (int j = 0; j < hoursListFromCall.size(); j++) {
                         hoursList.add(hoursListFromCall.path(j).asText());
                 }
-                System.out.println(hoursList);
-                String hoursOfOperation = apiResults.path(i).path("opening_hours").path("open_now").asText();
+//                System.out.println(hoursList.toString());
+                String hoursOfOperation = hoursList.toString().replace("[","").replace("]","");
                 String venueType = apiResults.path(i).path("types").path(0).asText();
+//                System.out.println(hoursOfOperation);
 
 
                 Landmark landmark = new Landmark(name, photo, description, address, hoursOfOperation, venueType);

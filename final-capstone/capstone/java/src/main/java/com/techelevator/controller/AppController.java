@@ -76,6 +76,12 @@ public class AppController {
         return sharedItineraries;
     }
 
+    @RequestMapping(path = "trips/{userId}/combined", method = RequestMethod.GET)
+    public List<Itinerary> getCombinedItineraries(Principal user){
+        List<Itinerary> comboList = itineraryDao.getCombinedItineraries(jdbcItineraryDao.getUserIdByUsername(user.getName()));
+        return comboList;
+    }
+
 
     @RequestMapping(path = "/itinerary/{itineraryId}", method = RequestMethod.GET)
     public Itinerary getItineraryById(@PathVariable int itineraryId, Principal user) {
@@ -96,6 +102,11 @@ public class AppController {
     @RequestMapping(path = "/users", method = RequestMethod.GET)
     public List<User> getAllUsers(){
         return userDao.findAll();
+    }
+
+    @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
+    public User getUser(@PathVariable int userId){
+        return userDao.getUserById(userId);
     }
 
 //    @RequestMapping(path = "/itineraries", method = RequestMethod.GET)
@@ -194,6 +205,16 @@ public class AppController {
         result.put("userId", curUserId);
         return result;
     }
+
+    @PreAuthorize("permitAll()")
+    @GetMapping("/itineraryOwner/{tripId}")
+    public String getOwnerUserId(@PathVariable int tripId){
+        int currentUserId = sharedTripDao.getShareTrip(tripId).getUser1Id();
+        User owner = userDao.getUserById(currentUserId);
+        String username = owner.getUsername();
+        return username;
+    }
+
 
 }
 

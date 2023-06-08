@@ -21,6 +21,8 @@ public interface ItineraryDao {
 
     List<Itinerary> getSharedItineraries(int userid);
 
+    List<Itinerary> getCombinedItineraries(int userId);
+
 
 
 }

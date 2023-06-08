@@ -11,6 +11,9 @@ public class SharedTrip {
         this.user2Id = user2Id;
     }
 
+    public SharedTrip() {
+    }
+
     public int getTripId() {
         return tripId;
     }

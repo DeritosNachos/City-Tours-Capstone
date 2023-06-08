@@ -10,6 +10,9 @@ export default {
     getSharedItineraries(userId){
         return axios.get(`/trips/${userId}/shared/itineraries`)
     },
+    getComboItineraries(userId){
+        return axios.get(`/trips/${userId}/combined`)
+    },
     getUsers(){
         return axios.get('/users')
     },
@@ -25,4 +28,10 @@ export default {
     deleteItinerary(itineraryId){
         return axios.delete(`/itinerary/${itineraryId}`)
     },
+    getUser(userId){
+        return axios.get(`/user/${userId}`, userId)
+    },
+    getOwnerName(tripId) {
+        return axios.get(`/itineraryOwner/${tripId}`)
+    }
 }

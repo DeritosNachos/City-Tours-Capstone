@@ -26,7 +26,7 @@ CREATE TABLE landmarks (
 	landmark_photo varchar(1000) NOT NULL,
 	landmark_description varchar(5000) NOT NULL,
 	landmark_address varchar(200) NOT NULL,
-	landmark_hours_of_operation varchar(200) NOT NULL,
+	landmark_hours_of_operation varchar NOT NULL,
 	landmark_venue_type varchar(100) NOT NULL,
 	landmark_like_count INT NOT NULL DEFAULT 0,
 	landmark_dislike_count INT NOT NULL DEFAULT 0,

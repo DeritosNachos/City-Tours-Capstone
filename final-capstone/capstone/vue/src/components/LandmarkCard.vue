@@ -42,8 +42,11 @@
           <p>{{ landmark.landmarkAddress }}</p>
           <br />
           <p>{{ landmark.landmarkVenueType }}</p>
-        </div>
-        <h3>{{ landmark.landmarkHoursOfOperation.includes('true') || !landmark.landmarkHoursOfOperation.includes('false') ? "Open" : "Closed" }}</h3>
+
+          <p v-for="day in weekHours" :key="day">{{ day }}</p>
+      
+        <!-- <p class="hOfO">{{ landmark.landmarkHoursOfOperation.replaceAll(", "," | ") }}</p> -->
+         </div>
       </div>
     </div>
   </div>
@@ -59,6 +62,7 @@ export default {
   props: ["landmark", "searchResult"],
   data() {
     return {
+      //weekHours: [],
       pathId: this.$route.params.id,
       likes: this.landmark.landmarkLikeCount,
       dislikes: this.landmark.landmarkDislikeCount,
@@ -69,6 +73,12 @@ export default {
         reviewed: false,
       },
     };
+  },
+  computed: {
+    weekHours() {
+      let weekArr = this.landmark.landmarkHoursOfOperation.split(", ");
+      return weekArr;
+    } 
   },
   methods: {
     addLikes() {
@@ -174,6 +184,8 @@ div.likes button {
   border-radius: 10px;
   color: #004aad;
 }
+
+
 
 @media only screen and (max-width: 1200px) {
   .card-container {

@@ -15,7 +15,7 @@
         class="m-md-2"
         variant="success">
           <b-dropdown-item
-            v-for="itinerary in itineraries"
+            v-for="itinerary in uniqueItins"
             :key="itinerary.itineraryId"
             @click.prevent="addItineraryId(itinerary.itineraryId)"
           >
@@ -47,13 +47,24 @@ export default {
       },
     };
   },
+  computed: {
+    uniqueItins() {
+      const key = "itineraryId";
+      const arrayUniqueByKey = [...new Map(this.itineraries.map(item =>
+  [item[key], item])).values()];
+    return arrayUniqueByKey;
+    }
+  },
   created() {
     landmarkService.getAllLandmarks().then((r) => {
       this.landmarks = r.data;
     });
-    ItineraryService.getSharedItineraries().then((response) => {
-      this.itineraries = response.data;
-    });
+    // ItineraryService.getAllItineraries().then((response) => {
+    //   this.itineraries = response.data;
+    // });
+    ItineraryService.getComboItineraries().then((response)=>{
+      this.itineraries = response.data
+    })
   },
   methods: {
     addLandmarkId(id) {
@@ -73,7 +84,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 
 .button-container {
   display: flex;

@@ -4,9 +4,9 @@
       <h2>
         {{ itinerary.itineraryName }}
       </h2>
-      <div v-for="user in getUsername" :key="user.id">
+      <div  v-for="user in getUsername" :key="user.id">
         <!-- insert avatar image here || user 1 name -->
-        <h5 >By {{user.username}} <avatar :fullname="user.username" :size="32" /></h5>
+        <h5 >By {{ItineraryOwner.length > 0 ? ItineraryOwner: user.username}} <avatar :fullname="ItineraryOwner.length > 0 ? ItineraryOwner: user.username" :size="32" /></h5>
         <br/>
       </div>
       <h3>
@@ -85,6 +85,7 @@ export default {
       users: [],
       showUsers: false,
       pathId: this.$route.params.id,
+      ItineraryOwner:"",
       sharedTrip: {
         tripId: parseInt(this.$route.params.id),
         user1Id: 0,
@@ -107,7 +108,7 @@ export default {
     // },
   },
   created() {
-    ItineraryService.getSpecificItinerary(this.pathId).then((response) => {
+    ItineraryService.getSpecificItinerary(this.sharedTrip.tripId).then((response) => {
       this.itinerary = response.data;
     });
 
@@ -117,8 +118,17 @@ export default {
     ItineraryService.getUsers().then((response) => {
       this.users = response.data;
     });
+    ItineraryService.getOwnerName(this.pathId).then((response) => {
+        this.ItineraryOwner = response.data;
+      })
+    
   },
   methods: {
+    getOwnerName() {
+      ItineraryService.getOwnerName(this.pathId).then((response) => {
+        this.ItineraryOwner = response.data;
+      })
+    },
     toggleShowUsers() {
       this.showUsers = !this.showUsers;
     },
@@ -150,15 +160,16 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted() {                  
     axios
-      .get("/api/current-user-id")
+      .get("/api/current-user-id") 
       .then((response) => {
         this.sharedTrip.user1Id = response.data.userId;
       })
       .catch((error) => {
         console.log(error);
       });
+  
   },
 };
 </script>

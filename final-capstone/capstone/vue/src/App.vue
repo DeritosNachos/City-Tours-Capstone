@@ -1,5 +1,5 @@
 <template class= "main">
-<div id="app">
+<div class="app" id="app">
      
     <div id="nav"> 
       <img id="logo" src="./assets/logo.png" alt="city tours logo">
@@ -42,7 +42,7 @@
     <!-- <img class="bg-img" src="./assets/philadelphia-skyline.jpg" alt="Philly skyline"> -->
     <div class="main">
    
-    <router-view />
+    <router-view class="router-view" />
     </div>
    <div id="Footer">
      <app-footer  year='2023' />
@@ -98,14 +98,23 @@ computed: {
 </script>
 
 
-<style>
+<style scoped>
+
+.app {
+    display: flex;
+    flex-direction: column;
+  }
 
 #app {
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
   flex-direction: column;
-  height: 100vh;
 }
+
+
+  .router-view {
+    flex-grow: 2;
+  }
 
 .bg-img{
   position: absolute;
@@ -160,10 +169,20 @@ nav.bm-item-list ul {
 }
 
 @media only screen and (max-width: 800px) { 
+  .app {
+    display: flex;
+    flex-direction: column;
+  }
+
  #app {
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
 }
+
+.router-view {
+    flex-grow: 2;
+  }
+
 #footer{
   margin-top:99vh;
 }
@@ -174,6 +193,7 @@ nav.bm-item-list ul {
 
 .main {
   position: relative;
+  height: -webkit-fill-available;
 }
 
 #logo {

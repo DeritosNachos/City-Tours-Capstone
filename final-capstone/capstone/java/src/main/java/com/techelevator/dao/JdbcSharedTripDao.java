@@ -21,4 +21,21 @@ public class JdbcSharedTripDao implements SharedTripDao{
         String sql = "INSERT INTO shared_trips (trip_id, user1_id, user2_id) VALUES (?,?,?)";
         jdbcTemplate.update(sql, sharedTrip.getTripId(), sharedTrip.getUser1Id(), sharedTrip.getUser2Id());
     }
+    @Override
+    public SharedTrip getShareTrip(int sharedTripId) {
+        String sql = "SELECT * FROM shared_trips WHERE trip_id = ?";
+        SharedTrip specificSharedTrip = new SharedTrip();
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, sharedTripId);
+
+        try{
+            if(result.next()) {
+                specificSharedTrip.setTripId(result.getInt("trip_id"));
+                specificSharedTrip.setUser1Id(result.getInt("user1_id"));
+                specificSharedTrip.setUser2Id(result.getInt("user2_id"));
+            }
+        } catch (Exception e){
+            throw new RuntimeException();
+        }
+        return specificSharedTrip;
+    }
 }

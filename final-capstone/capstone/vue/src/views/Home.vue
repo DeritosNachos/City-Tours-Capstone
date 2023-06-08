@@ -6,7 +6,7 @@
     </div>
     <search-landmark class="search-bar"/>
     <router-link class="create-link" :to="{ name: 'add-itinerary' }">
-      <b-button id="link-button" variant="primary">
+      <b-button id="link-button" block variant="primary">
       Create your Itinerary!
       </b-button>
     </router-link>
@@ -50,8 +50,16 @@ export default {
 }
 
 @media only screen and (max-width: 800px) {
+
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
   .create-link {
-    margin-left: 2vw;
+    margin-left: 6.5vw;
   }
 
   #link-button {
