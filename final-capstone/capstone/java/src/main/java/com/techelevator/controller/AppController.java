@@ -45,6 +45,9 @@ public class AppController {
     @Autowired
     private SharedTripDao sharedTripDao;
 
+    @Autowired
+    private ReviewDao reviewDao;
+
     //Get Requests Landmarks | Itineraries
     @PreAuthorize("permitAll()")
     @RequestMapping(path = "/landmarks", method = RequestMethod.GET)
@@ -213,6 +216,16 @@ public class AppController {
         User owner = userDao.getUserById(currentUserId);
         String username = owner.getUsername();
         return username;
+    }
+
+    @PostMapping("/review")
+    public void reviewLandmark(@RequestBody Review review) {
+        reviewDao.addReview(review);
+    }
+
+    @GetMapping("/review/{landmarkId}")
+    public Review getReview(@PathVariable int landmarkId, Principal principal){
+        return reviewDao.getReview(userDao.findIdByUsername(principal.getName()), landmarkId);
     }
 
 

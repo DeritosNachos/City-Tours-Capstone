@@ -3,6 +3,7 @@
     <div
       :key="landmark.landmarkId"
       class="landmark-card"
+      :class="{read: showHide}"
       @click="toggleShowHide"
     >
       <img :src="landmark.landmarkPhoto" alt="photo of landmark" />
@@ -67,11 +68,16 @@ export default {
       likes: this.landmark.landmarkLikeCount,
       dislikes: this.landmark.landmarkDislikeCount,
       showHide: false,
+      toggleReview: false,
       likedDisliked: {
         userId: 0,
-        landmarkId: 0,
+        landmarkId: this.landmark.landmarkId,
         reviewed: false,
       },
+      review: {
+        userId: 0,
+        landmarkId: this.landmark.landmarkId,
+      }
     };
   },
   computed: {
@@ -86,6 +92,7 @@ export default {
         if (r.status === 200) {
           console.log(r.status);
           this.likes++;
+          this.addReview();
           // location.reload();
         }
       });
@@ -95,9 +102,24 @@ export default {
         if (r.status === 200) {
           console.log(r.status);
           this.dislikes++;
+          this.addReview();
           // location.reload();
         }
       });
+    },
+    addReview(){
+      LandmarkService.reviewLandmark(this.likedDisliked).then((r) => {
+        if(r.status === 200) {
+          console.log(r.status);
+        }
+      })
+    },
+    getReview(){
+      LandmarkService.getLandmarkReview(this.likedDisliked).then((r) =>{
+        if(this.likedDisliked.userId === r.data.userId && this.likedDisliked.landmarkId === r.data.landmarkId) {
+          return r.data.reviewed;
+        }
+      })
     },
     toggleShowHide() {
       this.showHide = !this.showHide;
@@ -118,7 +140,23 @@ export default {
     ItineraryService.getAllItineraries().then((response) => {
       this.itineraries = response.data;
     });
+    axios
+      .get("/api/current-user-id")
+      .then((response) => {
+        this.likedDisliked.userId = response.data.userId;
+        this.review.userId = response.data.userId;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      LandmarkService.getLandmarkReview(this.landmark.landmarkId).then((r) =>{
+        console.log(r.data.reviewed)
+        if(this.likedDisliked.userId === r.data.userId && this.likedDisliked.landmarkId === r.data.landmarkId) {
+          return this.likedDisliked.reviewed = r.data.reviewed;
+        }
+      })
   },
+
   mounted() {
     axios
       .get("/api/current-user-id")
@@ -146,7 +184,7 @@ export default {
   border-radius: 10px;
   border: 2px solid;
   width: 500px;
-  height: 500px;
+  height: 400px;
   margin: 30px;
   position: relative;
 }
@@ -166,6 +204,7 @@ img {
   transition: height 5s;
 }
 .read {
+  height: auto;
   background: linear-gradient(
     rgba(0, 0, 0, 1),
     rgba(0, 0, 0, 0.75),

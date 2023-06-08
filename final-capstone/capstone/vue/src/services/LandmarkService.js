@@ -19,5 +19,11 @@ export default {
 
     catalogLandmark(landmark){
         return axios.post('/addLandmark', landmark)
+    },
+    reviewLandmark(review) {
+        return axios.post('/review', review)
+    },
+    getLandmarkReview(landmarkId) {
+        return axios.get(`/review/${landmarkId}`)
     }
 }

@@ -41,6 +41,8 @@
     </div>
     <!-- <img class="bg-img" src="./assets/philadelphia-skyline.jpg" alt="Philly skyline"> -->
     <div class="main">
+      <div>
+</div>
    
     <router-view class="router-view" />
     </div>
@@ -200,7 +202,7 @@ nav.bm-item-list ul {
   border-radius: 50%;
   height: 150px;
   border: 2px solid;
-  margin: 0;
+  margin: 10px 0 0 0;
 }
 #nav {
   display: flex;

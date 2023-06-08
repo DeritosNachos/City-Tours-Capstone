@@ -2,6 +2,7 @@
   <div>
     <div class="itinerary-form-container">
       <div class="add-itinerary">
+        <h2>Add Itinerary Details</h2>
         <b-form-group class="form-input-group">
         <!-- Input Name -->
         <b-input-group>
@@ -32,7 +33,9 @@
         <b-input-group-btn>
           <b-btn @click="addItinerary" class="input-btn" variant="light" type="submit">Submit</b-btn>
         </b-input-group-btn>
+        <!-- Link return home -->
       </b-form-group>
+      <b-link class="cancel-link" href="http://localhost:8080/">Cancel</b-link>
 
       </div>
       <!-- <form class="new-itinerary" v-on:submit.prevent="addItinerary">
@@ -134,6 +137,11 @@ export default {
 </script>
 
 <style scoped>
+h2{
+   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+   color: white;
+ }
+
 input,
 button {
   margin: 10px 0;
@@ -145,8 +153,8 @@ justify-content: center;
 align-items: center;
 /* background-image: linear-gradient(#8AAAE5, #004AAD); */
 border-radius: 10px;
-margin-right: 25%;
-  margin-left: 25%;
+margin-right: 15%;
+  margin-left: 15%;
 }
 
 .new-itinerary {
@@ -167,7 +175,6 @@ margin-right: 25%;
   border-radius: 10%;
   text-align: center;
   padding: 30px;
-  border:solid 5px black;
 }
 
 .form-input-group {
@@ -187,6 +194,6 @@ margin-right: 25%;
 }
 
 .cancel-link {
-  color: black;
+  color: white;
 }
 </style>

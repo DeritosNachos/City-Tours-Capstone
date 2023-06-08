@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS  shared_trips, trips, destinations, users, landmarks, itinerary CASCADE;
+DROP TABLE IF EXISTS reviewed_landmark, shared_trips, trips, destinations, users, landmarks, itinerary CASCADE;
 
 CREATE TABLE users (
 	user_id SERIAL,
@@ -10,14 +10,7 @@ CREATE TABLE users (
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 );
 
---CREATE TABLE reviewed_landmark (
---    user_id int,
---    landmark_id int,
---    reviewed BOOLEAN,
---    CONSTRAINT PK_reviewed_landmark PRIMARY KEY (user_id, landmark_id),
---    CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES users(user_id),
---    CONSTRAINT FK_landmark FOREIGN KEY (landmark_id) REFERENCES landmarks(landmark_id)
---);
+
 
 
 CREATE TABLE landmarks (
@@ -62,6 +55,15 @@ CREATE TABLE destinations (
     CONSTRAINT PK_destinations PRIMARY KEY (itinerary_id, landmark_id),
     CONSTRAINT FK_destination_itinerary FOREIGN KEY (itinerary_id) REFERENCES itinerary(itinerary_id),
     CONSTRAINT FK_destination_landmark FOREIGN KEY (landmark_id) REFERENCES landmarks(landmark_id)
+);
+
+CREATE TABLE reviewed_landmark (
+    user_id int,
+    landmark_id int,
+    reviewed BOOLEAN,
+    CONSTRAINT PK_reviewed_landmark PRIMARY KEY (user_id, landmark_id),
+    CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES users(user_id),
+    CONSTRAINT FK_landmark FOREIGN KEY (landmark_id) REFERENCES landmarks(landmark_id)
 );
 
 COMMIT TRANSACTION;

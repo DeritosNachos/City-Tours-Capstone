@@ -1,5 +1,6 @@
 package com.techelevator.dao;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,12 @@ public class JdbcDestinationDao implements DestinationDao {
     @Override
     public void addDestination(int itineraryId, int landmarkId) {
         String newDestinationSql = "INSERT INTO destinations(itinerary_id, landmark_id) VALUES(?,?)";
-        template.update(newDestinationSql, itineraryId, landmarkId);
+        try {
+            template.update(newDestinationSql, itineraryId, landmarkId);
+        } catch (DataAccessException e) {
+            System.out.println("Already in Trip");
+        }
+
     }
 
     @Override
