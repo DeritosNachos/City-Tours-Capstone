@@ -104,6 +104,7 @@ export default {
   
 }
 #login {
+  border: 2px solid black;
   /* background-color: rgba(255, 255, 255, 0.281); */
   background-image: linear-gradient(#8AAAE5, #004AAD );
   margin: 1em;
@@ -116,7 +117,7 @@ export default {
 }
 
 .input-group {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 label {
@@ -125,6 +126,12 @@ label {
 
 .input-btn {
   margin-top: 10px;
+}
+
+.login-link {
+  margin-top: 10px;
+  text-decoration: underline;
+  color: white;
 }
 
 @media only screen and (max-width: 800px) {
@@ -154,7 +161,7 @@ label {
 
 .login-link {
   margin-top: 10px;
-  text-decoration: none;
+  text-decoration: underline;
   color: white;
 }
 

@@ -132,6 +132,7 @@ div h2 {
   margin-right: 15%;
 }
 .edit-itinerary {
+  border: 2px solid black;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -145,6 +146,7 @@ div h2 {
 }
 
 .form-input-group {
+  width: 300px;
   margin-bottom: 1rem;
 }
 

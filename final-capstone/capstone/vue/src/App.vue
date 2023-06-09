@@ -105,6 +105,7 @@ computed: {
 .app {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
   }
 
 #app {
@@ -136,7 +137,7 @@ computed: {
 }
 #nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .nav-link {

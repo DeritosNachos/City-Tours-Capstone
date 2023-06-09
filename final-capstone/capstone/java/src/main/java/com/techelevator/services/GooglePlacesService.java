@@ -18,7 +18,7 @@ import java.util.List;
 public class GooglePlacesService {
 
     private String apiUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?key=";
-    private String key = "AIzaSyAIPv8AuAwBzetUcUQgpfkpeIVwzFbBpWo";
+    private String key = "AIzaSyBawfx8Z8v5BBpahbC1Q8UVzOOdZpA3p54";
     private String query = "&query=philadelphia+";
     private String params = "&fields=name,photos,formatted_address,types,opening_hours,formatted_phone_number,website,rating,reviews";
     private String photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&key=";

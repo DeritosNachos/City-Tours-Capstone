@@ -2,7 +2,6 @@ BEGIN TRANSACTION;
 
 INSERT INTO users (username,password_hash,role) VALUES ('user','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_USER');
 INSERT INTO users (username,password_hash,role) VALUES ('admin','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_ADMIN');
-INSERT INTO users (username,password_hash,role) VALUES ('JimJimIO','$2a$10$mSFs2NEDfW82aycQLCKTFup5GGAbVeb0u4Ba8hx46YcVy0gLu8wqW','ROLE_ADMIN');
 
 
 INSERT INTO landmarks (landmark_name, landmark_photo, landmark_description, landmark_address, landmark_hours_of_operation, landmark_venue_type)
@@ -19,10 +18,6 @@ VALUES ('Love Park','https://maps.googleapis.com/maps/api/place/photo?maxwidth=1
 
 INSERT INTO itinerary (itinerary_name, itinerary_date, itinerary_starting_point) VALUES ('Philly Trip', '2023-06-09', '1400 John F Kennedy Blvd, Philadelphia, PA 19107');
 
-INSERT INTO trips (user_id, itinerary_id) VALUES (3,1);
-
-INSERT INTO destinations (itinerary_id, landmark_id) VALUES (1, 1);
-INSERT INTO destinations (itinerary_id, landmark_id) VALUES (1, 2);
 
 
 

@@ -211,7 +211,7 @@ public class AppController {
 
     @PreAuthorize("permitAll()")
     @GetMapping("/itineraryOwner/{tripId}")
-    public String getOwnerUserId(@PathVariable int tripId){
+    public String getOwnerUserName(@PathVariable int tripId){
         int currentUserId = sharedTripDao.getShareTrip(tripId).getUser1Id();
         User owner = userDao.getUserById(currentUserId);
         String username = owner.getUsername();

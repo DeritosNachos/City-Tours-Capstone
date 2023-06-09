@@ -19,11 +19,24 @@
           <button v-on:click="addToList">Add to Route</button> -->
           
           <!-- Add Landmark Names here?-->
-          <p>Current Locations:</p>
-          <button v-on:click="generateRoute">Generate Route</button><br><br>
-          <div id="currentList" v-for="(location, index) of locations" v-bind:key="index">
-              <input class="current-inputs" v-model="locations[index]"/> <button v-on:click="removeFromList(index)">Remove</button>
-          </div>
+        <h3>Current Locations:</h3>
+        <b-form id="currentLocations">   
+        <b-input-group id="currentList" v-for="(location, index) of locations" v-bind:key="index">
+              <b-form-input class="current-inputs" v-model="locations[index]"/> 
+              <b-button v-on:click="removeFromList(index)"  variant="danger" id="remove">Remove</b-button>
+        </b-input-group>
+        </b-form>
+
+        <b-input-group-btn>
+          <br>
+          <b-btn v-on:click="generateRoute" class="input-btn" variant="secondary">Generate Route</b-btn>
+        </b-input-group-btn>
+
+          <!-- <button v-on:click="generateRoute">Generate Route</button><br><br> -->
+          <!-- <div id="currentList" v-for="(location, index) of locations" v-bind:key="index">
+              <input class="current-inputs" v-model="locations[index]"/> 
+              <button v-on:click="removeFromList(index)">Remove</button>
+          </div> -->
       </div>
       <!--Google Maps will render directions here-->
       <div id="panel"></div>
@@ -220,6 +233,10 @@ export default {
   width: 350px;
 }
 
+h3{
+  font-weight: bold;
+}
+
 @media only screen and (max-width: 800px) {
   .map-container {
     display: flex;
@@ -264,5 +281,9 @@ export default {
   width: 60vw;
   margin: 5px;
 }
+.currentLocations{
+  margin-top: 200px;
+}
+
 }
 </style>
